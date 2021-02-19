@@ -1,0 +1,13 @@
+domain: operator.com
+layout: go.kubebuilder.io/v3
+projectName: isv-must-gather-operator
+repo: github.com/jooho/isv-must-gather-operator
+resources:
+- crdVersion: v1
+  group: isv
+  kind: MustGather
+  version: v1alpha1
+version: 3-alpha
+plugins:
+  manifests.sdk.operatorframework.io/v2: {}
+  scorecard.sdk.operatorframework.io/v2: {}
