@@ -1,0 +1,7 @@
+apiVersion: isv.operator.com/v1alpha1
+kind: MustGather
+metadata:
+  name: mustgather-sample
+spec:
+  # Add fields here
+  foo: bar
