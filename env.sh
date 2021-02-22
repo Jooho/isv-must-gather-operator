@@ -14,7 +14,7 @@ export NEW_OP_HOME=${ROOT_HOME}/${NEW_OP_NAME}
 export NAMESPACE=${NEW_OP_NAME}
 
 # Images Info
-export IMG_TAG=v0.0.1
+export IMG_TAG=v0.2-alpha
 export IMG=quay.io/jooholee/${NEW_OP_NAME}:${IMG_TAG}
 export BUNDLE_TAG=v0.0.1
 export BUNDLE_IMG=quay.io/jooholee/${NEW_OP_NAME}:${BUNDLE_TAG}

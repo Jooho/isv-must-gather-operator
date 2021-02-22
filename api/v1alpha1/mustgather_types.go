@@ -36,7 +36,7 @@ type MustGatherSpec struct {
 // MustGatherStatus defines the observed state of MustGather
 type MustGatherStatus struct {
 	//DownloadURL is the endpoint to access downloag web page.
-	DownloadURL string `json:"downloadUrl"`
+	DownloadURL string `json:"downloadURL"`
 }
 
 // +kubebuilder:object:root=true

@@ -12,7 +12,7 @@ VERSION ?= 0.0.1
 # - use environment variables to overwrite this value (e.g export CHANNELS="preview,fast,stable")
 ifneq ($(origin CHANNELS), undefined)
 BUNDLE_CHANNELS := --channels=$(CHANNELS)
-endif
+endif	
 
 # DEFAULT_CHANNEL defines the default channel used in the bundle. 
 # Add a new line here if you would like to change its default config. (E.g DEFAULT_CHANNEL = "stable")
@@ -40,6 +40,9 @@ else
 GOBIN=$(shell go env GOBIN)
 endif
 
+SHELL := /bin/bash
+include $(shell pwd)/env
+
 all: manager
 
 # Run tests
@@ -55,7 +58,7 @@ manager: generate fmt vet
 
 # Run against the configured Kubernetes cluster in ~/.kube/config
 run: generate fmt vet manifests
-	go run ./main.go
+	LOCAL_TEST=true go run ./main.go
 
 # Install CRDs into a cluster
 install: manifests kustomize
@@ -91,12 +94,30 @@ generate: controller-gen
 	$(CONTROLLER_GEN) object:headerFile="hack/boilerplate.go.txt" paths="./..."
 
 # Build the podman image
-podman-build: test
+podman-build: test 
 	podman build -t ${IMG} .
 
 # Push the podman image
-podman-push:
+podman-push: 
 	podman push ${IMG}
+
+p-image: podman-build podman-push
+
+t-deploy: 
+	cd config/default/; kustomize edit set namespace "${NAMESPACE}" ;cd ../..
+	make deploy IMG=${IMG}
+	
+t-deploy-all: p-image t-deploy
+
+t-undeploy: 
+	oc delete -f $(shell pwd)/config/samples/isv_v1alpha1_mustgather.yaml --ignore-not-found
+	kustomize build config/default | kubectl delete -f -
+
+t-cr:
+	oc create -f $(shell pwd)/config/samples/isv_v1alpha1_mustgather.yaml
+
+t-del-cr:
+	oc delete -f $(shell pwd)/config/samples/isv_v1alpha1_mustgather.yaml --ignore-not-found
 
 # Download controller-gen locally if necessary
 CONTROLLER_GEN = $(shell pwd)/bin/controller-gen
@@ -134,3 +155,6 @@ bundle: manifests kustomize
 .PHONY: bundle-build
 bundle-build:
 	podman build -f bundle.Dockerfile -t $(BUNDLE_IMG) .
+
+clean:
+	rm -rf ./env

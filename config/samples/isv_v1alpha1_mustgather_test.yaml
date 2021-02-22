@@ -1,0 +1,6 @@
+apiVersion: isv.operator.com/v1alpha1
+kind: MustGather
+metadata:
+  name: mustgather-test
+spec:
+  MustGatherImgURL: "quay.io/jooholee/nfs-provisioner-operator-must-gather:test"
