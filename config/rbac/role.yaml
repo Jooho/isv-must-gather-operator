@@ -199,10 +199,11 @@ rules:
 - apiGroups:
   - operators.coreos.com
   resources:
-  - catalogsource
+  - catalogsources
   - clusterserviceversions
+  - installplans
   - operatorgroups
-  - subscription
+  - subscriptions
   verbs:
   - get
   - list
@@ -257,6 +258,7 @@ rules:
   - route.openshift.io
   resources:
   - routes
+  - routes/status
   verbs:
   - create
   - delete

@@ -44,11 +44,9 @@ spec:
           status:
             description: MustGatherStatus defines the observed state of MustGather
             properties:
-              downloadUrl:
+              downloadURL:
                 description: DownloadURL is the endpoint to access downloag web page.
                 type: string
-            required:
-            - downloadUrl
             type: object
         type: object
     served: true

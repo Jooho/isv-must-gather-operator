@@ -116,6 +116,11 @@ t-undeploy:
 t-cr:
 	oc create -f $(shell pwd)/config/samples/isv_v1alpha1_mustgather.yaml
 
+t-cr-event:
+	oc create -f $(shell pwd)/config/samples/isv_v1alpha1_mustgather_event.yaml
+
+
+
 t-del-cr:
 	oc delete -f $(shell pwd)/config/samples/isv_v1alpha1_mustgather.yaml --ignore-not-found
 

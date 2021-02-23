@@ -33,5 +33,5 @@ var (
 
 	//MustGatherImgURL should be updated based on ISV operator. This is the default that gather namespace scope data only.
 	// MustGatherImgURL = "quay.io/jooho/isv-operator-must-gather:" + Version
-	MustGatherImgURL = "quay.io/jooholee/nfs-provisioner-operator-must-gather:" + MustGatherImgVersion
+	MustGatherImgURL = "quay.io/jooholee/isv-smoke-must-gather" + MustGatherImgVersion
 )

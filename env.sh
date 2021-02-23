@@ -11,7 +11,8 @@ export OPM_VERSION=1.16.1
 export REPO_URL=github.com/jooho/isv-must-gather-operator
 export NEW_OP_NAME=isv-must-gather-operator
 export NEW_OP_HOME=${ROOT_HOME}/${NEW_OP_NAME}
-export NAMESPACE=${NEW_OP_NAME}
+# export NAMESPACE=${NEW_OP_NAME}
+export NAMESPACE=test-1
 
 # Images Info
 export IMG_TAG=v0.2-alpha

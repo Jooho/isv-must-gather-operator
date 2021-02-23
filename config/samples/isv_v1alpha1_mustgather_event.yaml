@@ -3,4 +3,4 @@ kind: MustGather
 metadata:
   name: mustgather-test
 spec:
-  MustGatherImgURL: "quay.io/jooholee/nfs-provisioner-operator-must-gather:test"
+  mustGatherImgURL: "quay.io/jooholee/isv-smoke-must-gather:event"

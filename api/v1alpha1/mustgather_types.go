@@ -31,12 +31,16 @@ type MustGatherSpec struct {
 	// MustGatherImgURL is the ISV operator must gather image url
 	// +operator-sdk:csv:customresourcedefinitions:type=spec,displayName="ISV Operator Must-Gather Image URL",xDescriptors={"urn:alm:descriptor:com.tectonic.ui:string", "urn:alm:descriptor:io.kubernetes:custom"}
 	MustGatherImgURL string `json:"mustGatherImgURL,omitempty"`
+
+	//TODO
+	//NAMESPACE
+	//DEBUG
 }
 
 // MustGatherStatus defines the observed state of MustGather
 type MustGatherStatus struct {
 	//DownloadURL is the endpoint to access downloag web page.
-	DownloadURL string `json:"downloadURL"`
+	DownloadURL string `json:"downloadURL,omitempty"`
 }
 
 // +kubebuilder:object:root=true

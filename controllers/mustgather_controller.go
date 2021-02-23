@@ -18,6 +18,7 @@ package controllers
 
 import (
 	"context"
+	"fmt"
 	"os"
 	"path"
 	"time"
@@ -60,10 +61,10 @@ type MustGatherReconciler struct {
 // +kubebuilder:rbac:groups=core,resources=services,verbs=get;list;watch;create;update;patch;delete;deletecollection
 // +kubebuilder:rbac:groups=core,resources=serviceaccounts,verbs=get;list;watch;create;update;patch;delete;deletecollection
 // +kubebuilder:rbac:groups=core,resources=endpoints,verbs=get;list;watch;create;update;patch;delete;deletecollection
-// +kubebuilder:rbac:groups=route.openshift.io,resources=routes,verbs=get;list;watch;create;update;patch;delete;deletecollection
+// +kubebuilder:rbac:groups=route.openshift.io,resources=routes;routes/status,verbs=get;list;watch;create;update;patch;delete;deletecollection
 // +kubebuilder:rbac:groups=core,resources=pods;pods/attach;pods/exec;pods/proxy;pods/log,verbs=get;list;watch;create;update;pathch;delete;deletecollection
 
-// +kubebuilder:rbac:groups=operators.coreos.com,resources=subscription;operatorgroups;clusterserviceversions;catalogsource,verbs=get;list;watch
+// +kubebuilder:rbac:groups=operators.coreos.com,resources=installplans;subscriptions;operatorgroups;clusterserviceversions;catalogsources,verbs=get;list;watch
 // +kubebuilder:rbac:groups=packages.operators.coreos.com,resources=packagemanifests;packagemanifests/icon,verbs=get;list;watch
 
 // +kubebuilder:rbac:groups=core,resources=secrets;configmaps;endpoints;persistentvolumeclaims;replicationcontrollers;services;events;limitranges;resourcequotas,verbs=get;list
@@ -335,7 +336,7 @@ func (r *MustGatherReconciler) newPod(sa string, mg *isvv1alpha1.MustGather) *co
 	zero := int64(0)
 	isvImg := defaults.IsvCliImg
 	mgImg := defaults.MustGatherImgURL
-
+	fmt.Printf("%v:", mg.Spec.MustGatherImgURL)
 	if mg.Spec.MustGatherImgURL != "" {
 		mgImg = mg.Spec.MustGatherImgURL
 	}
