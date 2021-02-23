@@ -161,5 +161,10 @@ bundle: manifests kustomize
 bundle-build:
 	podman build -f bundle.Dockerfile -t $(BUNDLE_IMG) .
 
+# Push the bundle image.
+.PHONY: bundle-push
+bundle-push:
+        podman push $(BUNDLE_IMG)
+				
 clean:
 	rm -rf ./env
