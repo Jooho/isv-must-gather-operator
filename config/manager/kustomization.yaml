@@ -13,4 +13,4 @@ kind: Kustomization
 images:
 - name: controller
   newName: quay.io/jooholee/isv-must-gather-operator
-  newTag: v0.2-alpha
+  newTag: 0.2.0

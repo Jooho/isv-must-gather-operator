@@ -159,12 +159,23 @@ bundle: manifests kustomize
 # Build the bundle image.
 .PHONY: bundle-build
 bundle-build:
-	podman build -f bundle.Dockerfile -t $(BUNDLE_IMG) .
+	podman build -f bundle.Dockerfile -t $(BUNDLE_IMG) --format=docker .
 
 # Push the bundle image.
 .PHONY: bundle-push
 bundle-push:
-        podman push $(BUNDLE_IMG)
-				
+		podman push $(BUNDLE_IMG)
+
+bundle-image: bundle-build bundle-push
+
+bundle-validate:
+	operator-sdk bundle validate $(BUNDLE_IMG) -b podman
+
+bundle-run:
+	operator-sdk run bundle $(BUNDLE_IMG) 
+
+bundle-clean:
+	operator-sdk cleanup $(NEW_OP_NAME)
+
 clean:
 	rm -rf ./env

@@ -15,18 +15,19 @@ export NEW_OP_HOME=${ROOT_HOME}/${NEW_OP_NAME}
 export NAMESPACE=test-1
 
 # Images Info
-export IMG_TAG=v0.2-alpha
+export VERSION=0.2.0
+export IMG_TAG=${VERSION}
 export IMG=quay.io/jooholee/${NEW_OP_NAME}:${IMG_TAG}
-export BUNDLE_TAG=v0.2.alpha
-export BUNDLE_IMG=quay.io/jooholee/${NEW_OP_NAME}:${BUNDLE_TAG}
-export INDEX_TAG=v0.2
+export BUNDLE_TAG=0.2.0
+export BUNDLE_IMG=quay.io/jooholee/${NEW_OP_NAME}-bundle:${BUNDLE_TAG}
+export INDEX_TAG=0.2.0
 export INDEX_IMG=quay.io/jooholee/${NEW_OP_NAME}-index:${INDEX_TAG}
 export CHANNELS=alpha
 export DEFAULT_CHANNEL=alpha
 
 # CRD Info
-export DOMAIN=operator.com
-export GROUP=isv
-export VERSION=v1alpha1
-export KIND=MustGather
+export CRD_DOMAIN=operator.com
+export CRD_GROUP=isv
+export CRD_VERSION=v1alpha1
+export CRD_KIND=MustGather
 

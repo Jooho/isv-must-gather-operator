@@ -1,0 +1,428 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: ClusterServiceVersion
+metadata:
+  annotations:
+    alm-examples: |-
+      [
+        {
+          "apiVersion": "isv.operator.com/v1alpha1",
+          "kind": "MustGather",
+          "metadata": {
+            "name": "mustgather-test"
+          },
+          "spec": {
+            "mustGatherImgURL": "quay.io/jooholee/isv-smoke-must-gather:v0.2-alpha"
+          }
+        }
+      ]
+    capabilities: Basic Install
+    operators.operatorframework.io/builder: operator-sdk-v1.4.0
+    operators.operatorframework.io/project_layout: go.kubebuilder.io/v3
+  name: isv-must-gather-operator.v0.2.0
+  namespace: placeholder
+spec:
+  apiservicedefinitions: {}
+  customresourcedefinitions:
+    owned:
+    - description: MustGather is the Schema for the mustgathers API
+      displayName: Must Gather
+      kind: MustGather
+      name: mustgathers.isv.operator.com
+      specDescriptors:
+      - description: MustGatherImgURL is the ISV operator must gather image url
+        displayName: ISV Operator Must-Gather Image URL
+        path: mustGatherImgURL
+        x-descriptors:
+        - urn:alm:descriptor:com.tectonic.ui:string
+        - urn:alm:descriptor:io.kubernetes:custom
+      version: v1alpha1
+  description: This provide the easy way to gather debugging data of ISV Operator.
+  displayName: ISV Must Gather Operator
+  icon:
+  - base64data: ""
+    mediatype: ""
+  install:
+    spec:
+      clusterPermissions:
+      - rules:
+        - apiGroups:
+          - apps
+          resources:
+          - daemonset
+          - deployments
+          - replicasets
+          - statefulsets
+          verbs:
+          - get
+          - list
+        - apiGroups:
+          - apps.openshift.io
+          resources:
+          - deploymentconfigs
+          verbs:
+          - get
+          - list
+        - apiGroups:
+          - batch
+          resources:
+          - cronjobs
+          - jobs
+          verbs:
+          - get
+          - list
+        - apiGroups:
+          - build.openshift.io
+          resources:
+          - builds
+          verbs:
+          - get
+          - list
+        - apiGroups:
+          - ""
+          resources:
+          - configmaps
+          - endpoints
+          - events
+          - limitranges
+          - persistentvolumeclaims
+          - replicationcontrollers
+          - resourcequotas
+          - secrets
+          - services
+          verbs:
+          - get
+          - list
+        - apiGroups:
+          - ""
+          resources:
+          - endpoints
+          verbs:
+          - create
+          - delete
+          - deletecollection
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - ""
+          resources:
+          - namespaces
+          verbs:
+          - get
+        - apiGroups:
+          - ""
+          resources:
+          - pods
+          - pods/attach
+          - pods/exec
+          - pods/log
+          - pods/proxy
+          verbs:
+          - create
+          - delete
+          - deletecollection
+          - get
+          - list
+          - pathch
+          - update
+          - watch
+        - apiGroups:
+          - ""
+          resources:
+          - serviceaccounts
+          verbs:
+          - create
+          - delete
+          - deletecollection
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - ""
+          resources:
+          - services
+          verbs:
+          - create
+          - delete
+          - deletecollection
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - extensions
+          resources:
+          - daemonsets
+          - deployments
+          - ingresses
+          - networkpolicies
+          - replicasets
+          verbs:
+          - get
+          - list
+        - apiGroups:
+          - extensions
+          - networking.k8s.io
+          resources:
+          - ingresses
+          - networkpolicies
+          verbs:
+          - get
+          - list
+        - apiGroups:
+          - image.openshift.io
+          resources:
+          - imagestreamimages
+          - imagestreammappings
+          - imagestreams
+          - imagestreams/layers
+          - imagestreams/secrets
+          - imagestreamtags/imagetags
+          verbs:
+          - get
+          - list
+          - watch
+        - apiGroups:
+          - isv.operator.com
+          resources:
+          - mustgathers
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - isv.operator.com
+          resources:
+          - mustgathers/finalizers
+          verbs:
+          - update
+        - apiGroups:
+          - isv.operator.com
+          resources:
+          - mustgathers/status
+          verbs:
+          - get
+          - patch
+          - update
+        - apiGroups:
+          - metrics.k8s.io
+          resources:
+          - pods
+          verbs:
+          - get
+          - list
+        - apiGroups:
+          - networking.k8s.io
+          resources:
+          - ingresses
+          verbs:
+          - get
+          - list
+        - apiGroups:
+          - networking.k8s.io
+          resources:
+          - ingresses
+          - networkpolicies
+          verbs:
+          - get
+          - list
+        - apiGroups:
+          - operators.coreos.com
+          resources:
+          - catalogsources
+          - clusterserviceversions
+          - installplans
+          - operatorgroups
+          - subscriptions
+          verbs:
+          - get
+          - list
+          - watch
+        - apiGroups:
+          - packages.operators.coreos.com
+          resources:
+          - packagemanifests
+          - packagemanifests/icon
+          verbs:
+          - get
+          - list
+          - watch
+        - apiGroups:
+          - policy
+          resources:
+          - poddisruptionbudgets
+          verbs:
+          - get
+          - list
+        - apiGroups:
+          - project.openshift.io
+          resources:
+          - projects
+          verbs:
+          - get
+        - apiGroups:
+          - rbac.authorization.k8s.io
+          resources:
+          - rolebindings
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - rbac.authorization.k8s.io
+          resources:
+          - roles
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - route.openshift.io
+          resources:
+          - routes
+          - routes/status
+          verbs:
+          - create
+          - delete
+          - deletecollection
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - authentication.k8s.io
+          resources:
+          - tokenreviews
+          verbs:
+          - create
+        - apiGroups:
+          - authorization.k8s.io
+          resources:
+          - subjectaccessreviews
+          verbs:
+          - create
+        serviceAccountName: default
+      deployments:
+      - name: isv-must-gather-operator-controller-manager
+        spec:
+          replicas: 1
+          selector:
+            matchLabels:
+              control-plane: controller-manager
+          strategy: {}
+          template:
+            metadata:
+              labels:
+                control-plane: controller-manager
+            spec:
+              containers:
+              - args:
+                - --secure-listen-address=0.0.0.0:8443
+                - --upstream=http://127.0.0.1:8080/
+                - --logtostderr=true
+                - --v=10
+                image: gcr.io/kubebuilder/kube-rbac-proxy:v0.5.0
+                name: kube-rbac-proxy
+                ports:
+                - containerPort: 8443
+                  name: https
+                resources: {}
+              - args:
+                - --health-probe-bind-address=:8081
+                - --metrics-bind-address=127.0.0.1:8080
+                - --leader-elect
+                command:
+                - /manager
+                image: quay.io/jooholee/isv-must-gather-operator:0.2.0
+                imagePullPolicy: Always
+                livenessProbe:
+                  httpGet:
+                    path: /healthz
+                    port: 8081
+                  initialDelaySeconds: 15
+                  periodSeconds: 20
+                name: manager
+                readinessProbe:
+                  httpGet:
+                    path: /readyz
+                    port: 8081
+                  initialDelaySeconds: 5
+                  periodSeconds: 10
+                resources:
+                  limits:
+                    cpu: 100m
+                    memory: 30Mi
+                  requests:
+                    cpu: 100m
+                    memory: 20Mi
+                securityContext:
+                  allowPrivilegeEscalation: false
+              terminationGracePeriodSeconds: 10
+      permissions:
+      - rules:
+        - apiGroups:
+          - ""
+          - coordination.k8s.io
+          resources:
+          - configmaps
+          - leases
+          verbs:
+          - get
+          - list
+          - watch
+          - create
+          - update
+          - patch
+          - delete
+        - apiGroups:
+          - ""
+          resources:
+          - events
+          verbs:
+          - create
+          - patch
+        serviceAccountName: default
+    strategy: deployment
+  installModes:
+  - supported: false
+    type: OwnNamespace
+  - supported: false
+    type: SingleNamespace
+  - supported: false
+    type: MultiNamespace
+  - supported: true
+    type: AllNamespaces
+  keywords:
+  - openshift
+  - mustgather
+  - isv
+  - managed service
+  links:
+  - name: Isv Must Gather Operator
+    url: https://isv-must-gather-operator.domain
+  maintainers:
+  - email: jlee@redhat.com
+    name: jay
+  maturity: alpha
+  provider:
+    name: Jooho Lee
+    url: https://github.com/Jooho
+  version: 0.2.0
