@@ -7,53 +7,6 @@ metadata:
   name: manager-role
 rules:
 - apiGroups:
-  - apps
-  resources:
-  - daemonset
-  - deployments
-  - replicasets
-  - statefulsets
-  verbs:
-  - get
-  - list
-- apiGroups:
-  - apps.openshift.io
-  resources:
-  - deploymentconfigs
-  verbs:
-  - get
-  - list
-- apiGroups:
-  - batch
-  resources:
-  - cronjobs
-  - jobs
-  verbs:
-  - get
-  - list
-- apiGroups:
-  - build.openshift.io
-  resources:
-  - builds
-  verbs:
-  - get
-  - list
-- apiGroups:
-  - ""
-  resources:
-  - configmaps
-  - endpoints
-  - events
-  - limitranges
-  - persistentvolumeclaims
-  - replicationcontrollers
-  - resourcequotas
-  - secrets
-  - services
-  verbs:
-  - get
-  - list
-- apiGroups:
   - ""
   resources:
   - endpoints
@@ -66,12 +19,6 @@ rules:
   - patch
   - update
   - watch
-- apiGroups:
-  - ""
-  resources:
-  - namespaces
-  verbs:
-  - get
 - apiGroups:
   - ""
   resources:
@@ -116,39 +63,6 @@ rules:
   - update
   - watch
 - apiGroups:
-  - extensions
-  resources:
-  - daemonsets
-  - deployments
-  - ingresses
-  - networkpolicies
-  - replicasets
-  verbs:
-  - get
-  - list
-- apiGroups:
-  - extensions
-  - networking.k8s.io
-  resources:
-  - ingresses
-  - networkpolicies
-  verbs:
-  - get
-  - list
-- apiGroups:
-  - image.openshift.io
-  resources:
-  - imagestreamimages
-  - imagestreammappings
-  - imagestreams
-  - imagestreams/layers
-  - imagestreams/secrets
-  - imagestreamtags/imagetags
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
   - isv.operator.com
   resources:
   - mustgathers
@@ -175,65 +89,9 @@ rules:
   - patch
   - update
 - apiGroups:
-  - metrics.k8s.io
-  resources:
-  - pods
-  verbs:
-  - get
-  - list
-- apiGroups:
-  - networking.k8s.io
-  resources:
-  - ingresses
-  verbs:
-  - get
-  - list
-- apiGroups:
-  - networking.k8s.io
-  resources:
-  - ingresses
-  - networkpolicies
-  verbs:
-  - get
-  - list
-- apiGroups:
-  - operators.coreos.com
-  resources:
-  - catalogsources
-  - clusterserviceversions
-  - installplans
-  - operatorgroups
-  - subscriptions
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - packages.operators.coreos.com
-  resources:
-  - packagemanifests
-  - packagemanifests/icon
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - policy
-  resources:
-  - poddisruptionbudgets
-  verbs:
-  - get
-  - list
-- apiGroups:
-  - project.openshift.io
-  resources:
-  - projects
-  verbs:
-  - get
-- apiGroups:
   - rbac.authorization.k8s.io
   resources:
-  - rolebindings
+  - clusterrolebindings
   verbs:
   - create
   - delete
@@ -245,7 +103,19 @@ rules:
 - apiGroups:
   - rbac.authorization.k8s.io
   resources:
-  - roles
+  - clusterroles
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - rbac.authorization.k8s.io
+  resources:
+  - rolebindings
   verbs:
   - create
   - delete

@@ -1,9 +1,12 @@
 package defaults
 
 const (
+	//DestDir is for webserver context-root and also mustgather.tar path. Do not change this DestDir.
 	DestDir              = "/opt/download"
-	IsvCliImgVersion     = "v0.2-alpha"
-	MustGatherImgVersion = "test"
+	//IsvCliImgVersion will be updated by make command
+	IsvCliImgVersion     = "0.2.1"
+	//MustGatherImgVersion will be updated by make command
+	MustGatherImgVersion = "all"
 )
 
 var (
@@ -32,6 +35,5 @@ var (
 	IsvCliImg = "quay.io/jooholee/isv-cli:" + IsvCliImgVersion
 
 	//MustGatherImgURL should be updated based on ISV operator. This is the default that gather namespace scope data only.
-	// MustGatherImgURL = "quay.io/jooho/isv-operator-must-gather:" + Version
-	MustGatherImgURL = "quay.io/jooholee/isv-smoke-must-gather" + MustGatherImgVersion
+	MustGatherImgURL = "quay.io/jooholee/isv-smoke-must-gather:" + MustGatherImgVersion
 )

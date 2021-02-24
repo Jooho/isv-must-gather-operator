@@ -3,4 +3,4 @@ kind: MustGather
 metadata:
   name: mustgather-test
 spec:
-  mustGatherImgURL: "quay.io/jooholee/isv-smoke-must-gather:v0.2-alpha"
+  mustGatherImgURL: "quay.io/jooholee/isv-smoke-must-gather:0.2.0"

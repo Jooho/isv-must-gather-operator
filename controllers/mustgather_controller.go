@@ -19,7 +19,8 @@ package controllers
 import (
 	"context"
 	"fmt"
-	"os"
+
+	// "os"
 	"path"
 	"time"
 
@@ -56,32 +57,15 @@ type MustGatherReconciler struct {
 // +kubebuilder:rbac:groups=isv.operator.com,resources=mustgathers/status,verbs=get;update;patch
 // +kubebuilder:rbac:groups=isv.operator.com,resources=mustgathers/finalizers,verbs=update
 
-// +kubebuilder:rbac:groups=rbac.authorization.k8s.io,resources=roles,verbs=get;list;watch;create;update;patch;delete
+// +kubebuilder:rbac:groups=rbac.authorization.k8s.io,resources=clusterroles,verbs=get;list;watch;create;update;patch;delete
+// +kubebuilder:rbac:groups=rbac.authorization.k8s.io,resources=clusterrolebindings,verbs=get;list;watch;create;update;patch;delete
+
 // +kubebuilder:rbac:groups=rbac.authorization.k8s.io,resources=rolebindings,verbs=get;list;watch;create;update;patch;delete
 // +kubebuilder:rbac:groups=core,resources=services,verbs=get;list;watch;create;update;patch;delete;deletecollection
 // +kubebuilder:rbac:groups=core,resources=serviceaccounts,verbs=get;list;watch;create;update;patch;delete;deletecollection
 // +kubebuilder:rbac:groups=core,resources=endpoints,verbs=get;list;watch;create;update;patch;delete;deletecollection
 // +kubebuilder:rbac:groups=route.openshift.io,resources=routes;routes/status,verbs=get;list;watch;create;update;patch;delete;deletecollection
 // +kubebuilder:rbac:groups=core,resources=pods;pods/attach;pods/exec;pods/proxy;pods/log,verbs=get;list;watch;create;update;pathch;delete;deletecollection
-
-// +kubebuilder:rbac:groups=operators.coreos.com,resources=installplans;subscriptions;operatorgroups;clusterserviceversions;catalogsources,verbs=get;list;watch
-// +kubebuilder:rbac:groups=packages.operators.coreos.com,resources=packagemanifests;packagemanifests/icon,verbs=get;list;watch
-
-// +kubebuilder:rbac:groups=core,resources=secrets;configmaps;endpoints;persistentvolumeclaims;replicationcontrollers;services;events;limitranges;resourcequotas,verbs=get;list
-// +kubebuilder:rbac:groups=apps,resources=daemonset;deployments;replicasets;statefulsets,verbs=get;list
-// +kubebuilder:rbac:groups=batch,resources=cronjobs;jobs,verbs=get;list
-// +kubebuilder:rbac:groups=extensions,resources=daemonsets;deployments;ingresses;networkpolicies;replicasets,verbs=get;list
-// +kubebuilder:rbac:groups=policy,resources=poddisruptionbudgets,verbs=get;list
-// +kubebuilder:rbac:groups=networking.k8s.io,resources=ingresses;networkpolicies,verbs=get;list
-// +kubebuilder:rbac:groups=networking.k8s.io,resources=ingresses,verbs=get;list
-// +kubebuilder:rbac:groups=extensions;networking.k8s.io,resources=ingresses;networkpolicies,verbs=get;list
-// +kubebuilder:rbac:groups=metrics.k8s.io,resources=pods,verbs=get;list
-// +kubebuilder:rbac:groups=build.openshift.io,resources=builds,verbs=get;list
-// +kubebuilder:rbac:groups=apps.openshift.io,resources=deploymentconfigs,verbs=get;list
-
-// +kubebuilder:rbac:groups=core,resources=namespaces,verbs=get
-// +kubebuilder:rbac:groups=project.openshift.io,resources=projects,verbs=get
-// +kubebuilder:rbac:groups=image.openshift.io,resources=imagestreamimages;imagestreammappings;imagestreams;imagestreams/secrets;imagestreamtags/imagetags;imagestreams/layers,verbs=get;list;watch
 
 // Reconcile is part of the main kubernetes reconciliation loop which aims to
 // move the current state of the cluster closer to the desired state.
@@ -109,58 +93,51 @@ func (r *MustGatherReconciler) Reconcile(ctx context.Context, req ctrl.Request) 
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
 
+	//ToDo
 	// Validate checking
-
 	// Object Creation
 
-	localTest := os.Getenv("LOCAL_TEST")
-	var saName string = "default"
-	if localTest == "true" {
+	// ServiceAccount
+	// Check if the serviceaccount already exists, if not create a new one
+	sa := &corev1.ServiceAccount{}
+	err := r.Get(ctx, types.NamespacedName{Name: defaults.ServiceAccount, Namespace: mustgather.Namespace}, sa)
+	if err != nil && errors.IsNotFound(err) {
+		// Define a new serviceaccount
+		sa = r.newSA(mustgather)
 
-		// ServiceAccount
-		// Check if the serviceaccount already exists, if not create a new one
-		sa := &corev1.ServiceAccount{}
-		err := r.Get(ctx, types.NamespacedName{Name: defaults.ServiceAccount, Namespace: mustgather.Namespace}, sa)
-		if err != nil && errors.IsNotFound(err) {
-			// Define a new serviceaccount
-			sa = r.newSA(mustgather)
+		log.Info("Creating a new Serviceaccount", "Serviceaccount.Namespace", sa.Namespace, "Serviceaccount.Name", sa.Name)
 
-			log.Info("Creating a new Serviceaccount", "Serviceaccount.Namespace", sa.Namespace, "Serviceaccount.Name", sa.Name)
-
-			if err := r.Create(ctx, sa); err != nil {
-				log.Error(err, "Failed to create a new Serviceaccount", "Serviceaccount.Namespace", sa.Namespace, "Serviceaccount.Name", sa.Name)
-				return ctrl.Result{}, err
-			}
-
+		if err := r.Create(ctx, sa); err != nil {
+			log.Error(err, "Failed to create a new Serviceaccount", "Serviceaccount.Namespace", sa.Namespace, "Serviceaccount.Name", sa.Name)
+			return ctrl.Result{}, err
 		}
-		saName = sa.Name
 
-		// // RoleBinding
-		rb := &rbacv1.RoleBinding{}
-		err = r.Get(ctx, types.NamespacedName{Name: defaults.RoleBinding, Namespace: mustgather.Namespace}, rb)
-		if err != nil && errors.IsNotFound(err) {
-			rb = r.newRoleBinding(sa.Name, mustgather)
+	}
 
-			log.Info("Creating a new RoleBinding", "RoleBinding.Namespace", rb.Namespace, "roleBinding.Name", rb.Name)
+	// RoleBinding
+	rb := &rbacv1.RoleBinding{}
+	err = r.Get(ctx, types.NamespacedName{Name: defaults.RoleBinding, Namespace: mustgather.Namespace}, rb)
+	if err != nil && errors.IsNotFound(err) {
+		rb = r.newRoleBinding(sa.Name, mustgather)
 
-			if err := r.Create(ctx, rb); err != nil {
-				log.Error(err, "Failed to create a RoleBinding for MustGather", "roleBinding.Namespace", rb.Namespace, "roleBinding.Name", rb.Name)
-				return ctrl.Result{}, err
-			}
+		log.Info("Creating a new RoleBinding", "RoleBinding.Namespace", rb.Namespace, "roleBinding.Name", rb.Name)
+
+		if err := r.Create(ctx, rb); err != nil {
+			log.Error(err, "Failed to create a RoleBinding for MustGather", "roleBinding.Namespace", rb.Namespace, "roleBinding.Name", rb.Name)
+			return ctrl.Result{}, err
 		}
 	}
+	// }
 	// Deployment
 	dep := &corev1.Pod{}
-	err := r.Get(ctx, types.NamespacedName{Name: defaults.Pod, Namespace: mustgather.Namespace}, dep)
+	err = r.Get(ctx, types.NamespacedName{Name: defaults.Pod, Namespace: mustgather.Namespace}, dep)
 	if err != nil && errors.IsNotFound(err) {
-		// Define a new deployment
-		// dep = r.newDeployment(sa.Name, mustgather)
 
-		dep = r.newPod(saName, mustgather)
+		dep = r.newPod(sa.Name, mustgather)
 
-		log.Info("Creating a new Deployment", "Deployment.Namespace", dep.Namespace, "Deployment.Name", dep.Name)
+		log.Info("Creating a new Pod", "Pod.Namespace", mustgather.Namespace, "Pod.Name", dep.Name)
 		if err = r.Create(ctx, dep); err != nil {
-			log.Error(err, "Failed to create a Deployment for MustGather", "Deployment.Namespace", dep.Namespace, "Deployment.Name", dep.Name)
+			log.Error(err, "Failed to create a Pod for MustGather", "Pod.Namespace", mustgather.Namespace, "Pod.Name", dep.Name)
 			return ctrl.Result{}, err
 		}
 
@@ -305,7 +282,7 @@ func (r *MustGatherReconciler) newRoleBinding(sa string, mg *isvv1alpha1.MustGat
 		RoleRef: rbacv1.RoleRef{
 			APIGroup: "rbac.authorization.k8s.io",
 			Kind:     "ClusterRole",
-			Name:     "Admin",
+			Name:     "admin",
 		},
 		Subjects: []rbacv1.Subject{
 			{
@@ -354,8 +331,8 @@ func (r *MustGatherReconciler) newPod(sa string, mg *isvv1alpha1.MustGather) *co
 			},
 		},
 		Spec: corev1.PodSpec{
-			RestartPolicy: corev1.RestartPolicyNever,
-
+			RestartPolicy:      corev1.RestartPolicyNever,
+			ServiceAccountName: sa,
 			Volumes: []corev1.Volume{
 				{
 					Name: "must-gather-download",
@@ -370,7 +347,7 @@ func (r *MustGatherReconciler) newPod(sa string, mg *isvv1alpha1.MustGather) *co
 					Image:           isvImg,
 					ImagePullPolicy: corev1.PullAlways,
 					// always force disk flush to ensure that all data gathered is accessible in the copy container
-					Command: []string{"/bin/bash", "-c", "isv-cli must-gather --image " + mgImg + " --dest-dir /opt/download --browser ; sync"},
+					Command: []string{"/bin/bash", "-c", "isv-cli must-gather --image " + mgImg + " --dest-dir "+ defaults.DestDir + " --browser ; sync"},
 					Env: []corev1.EnvVar{
 						{
 							Name: "NAMESPACE",
@@ -399,10 +376,6 @@ func (r *MustGatherReconciler) newPod(sa string, mg *isvv1alpha1.MustGather) *co
 		},
 	}
 
-	if sa != "default" {
-		ret.Spec.ServiceAccountName = sa
-
-	}
 	// Set MustGather instance as the owner and controller
 	ctrl.SetControllerReference(mg, ret, r.Scheme)
 	return ret

@@ -58,7 +58,7 @@ manager: generate fmt vet
 
 # Run against the configured Kubernetes cluster in ~/.kube/config
 run: generate fmt vet manifests
-	LOCAL_TEST=true go run ./main.go
+	go run ./main.go
 
 # Install CRDs into a cluster
 install: manifests kustomize
@@ -95,6 +95,8 @@ generate: controller-gen
 
 # Build the podman image
 podman-build: test 
+	sed "s/IsvCliImgVersion     =.*/IsvCliImgVersion     = \"$(VERSION)\"/g" -i ./controllers/defaults/defaults.go
+	sed "s/MustGatherImgVersion =.*/MustGatherImgVersion = \"$(SMOKE_MUST_GATHER_TAG)\"/g" -i ./controllers/defaults/defaults.go
 	podman build -t ${IMG} .
 
 # Push the podman image
@@ -118,8 +120,6 @@ t-cr:
 
 t-cr-event:
 	oc create -f $(shell pwd)/config/samples/isv_v1alpha1_mustgather_event.yaml
-
-
 
 t-del-cr:
 	oc delete -f $(shell pwd)/config/samples/isv_v1alpha1_mustgather.yaml --ignore-not-found
@@ -166,7 +166,7 @@ bundle-build:
 bundle-push:
 		podman push $(BUNDLE_IMG)
 
-bundle-image: bundle-build bundle-push
+bundle-image: bundle bundle-build bundle-push
 
 bundle-validate:
 	operator-sdk bundle validate $(BUNDLE_IMG) -b podman
@@ -176,6 +176,27 @@ bundle-run:
 
 bundle-clean:
 	operator-sdk cleanup $(NEW_OP_NAME)
+
+index-build: download
+	opm index add --bundles ${BUNDLE_IMG} --tag ${INDEX_IMG} -c podman
+
+index-push:
+	podman push ${INDEX_IMG}
+
+index-image: index-build index-push
+
+cs-deploy:
+	./hack/deploy-catalogSource.sh
+
+cs-undeploy:
+	oc delete mustgather --all --all-namespaces --ignore-not-found
+	oc delete csv isv-must-gather-operator.v$(IMG_TAG) --ignore-not-found
+	oc delete installplans --all -n openshift-operators
+	oc delete subscription isv-must-gather-operator -n openshift-operators
+	oc delete catalogsource isv-must-gather-operator-catalog -n openshift-marketplace
+
+download: 
+	test -f /usr/local/bin/opm ||	./hack/download.sh
 
 clean:
 	rm -rf ./env

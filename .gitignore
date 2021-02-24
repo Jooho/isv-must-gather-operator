@@ -28,3 +28,7 @@ testbin/*
 *.swp
 *.swo
 *~
+
+# Custom
+env
+bundle-*
