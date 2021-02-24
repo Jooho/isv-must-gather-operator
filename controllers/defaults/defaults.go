@@ -2,9 +2,9 @@ package defaults
 
 const (
 	//DestDir is for webserver context-root and also mustgather.tar path. Do not change this DestDir.
-	DestDir              = "/opt/download"
+	DestDir = "/opt/download"
 	//IsvCliImgVersion will be updated by make command
-	IsvCliImgVersion     = "0.2.1"
+	IsvCliImgVersion = "0.2.0"
 	//MustGatherImgVersion will be updated by make command
 	MustGatherImgVersion = "all"
 )

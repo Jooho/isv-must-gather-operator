@@ -347,7 +347,7 @@ func (r *MustGatherReconciler) newPod(sa string, mg *isvv1alpha1.MustGather) *co
 					Image:           isvImg,
 					ImagePullPolicy: corev1.PullAlways,
 					// always force disk flush to ensure that all data gathered is accessible in the copy container
-					Command: []string{"/bin/bash", "-c", "isv-cli must-gather --image " + mgImg + " --dest-dir "+ defaults.DestDir + " --browser ; sync"},
+					Command: []string{"/bin/bash", "-c", "isv-cli must-gather --image " + mgImg + " --dest-dir " + defaults.DestDir + " --browser ; sync"},
 					Env: []corev1.EnvVar{
 						{
 							Name: "NAMESPACE",

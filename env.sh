@@ -15,12 +15,12 @@ export NEW_OP_HOME=${ROOT_HOME}/${NEW_OP_NAME}
 export NAMESPACE=openshift-marketplace
 
 # Images Info
-export VERSION=0.2.1
+export VERSION=0.2.0
 export IMG_TAG=${VERSION}
 export IMG=quay.io/jooholee/${NEW_OP_NAME}:${IMG_TAG}
-export BUNDLE_TAG=0.2.1
+export BUNDLE_TAG=0.2.0
 export BUNDLE_IMG=quay.io/jooholee/${NEW_OP_NAME}-bundle:${BUNDLE_TAG}
-export INDEX_TAG=0.2.1
+export INDEX_TAG=0.2.0
 export INDEX_IMG=quay.io/jooholee/${NEW_OP_NAME}-index:${INDEX_TAG}
 export CHANNELS=alpha
 export DEFAULT_CHANNEL=alpha

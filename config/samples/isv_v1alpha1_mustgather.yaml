@@ -2,5 +2,5 @@ apiVersion: isv.operator.com/v1alpha1
 kind: MustGather
 metadata:
   name: mustgather-test
-spec:
-  mustGatherImgURL: "quay.io/jooholee/isv-smoke-must-gather:0.2.0"
+spec: {}
+  # mustGatherImgURL: "quay.io/jooholee/isv-smoke-must-gather:0.2.0"

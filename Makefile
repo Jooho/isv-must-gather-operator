@@ -95,7 +95,7 @@ generate: controller-gen
 
 # Build the podman image
 podman-build: test 
-	sed "s/IsvCliImgVersion     =.*/IsvCliImgVersion     = \"$(VERSION)\"/g" -i ./controllers/defaults/defaults.go
+	sed "s/IsvCliImgVersion =.*/IsvCliImgVersion = \"$(VERSION)\"/g" -i ./controllers/defaults/defaults.go
 	sed "s/MustGatherImgVersion =.*/MustGatherImgVersion = \"$(SMOKE_MUST_GATHER_TAG)\"/g" -i ./controllers/defaults/defaults.go
 	podman build -t ${IMG} .
 

@@ -10,15 +10,13 @@ metadata:
           "metadata": {
             "name": "mustgather-test"
           },
-          "spec": {
-            "mustGatherImgURL": "quay.io/jooholee/isv-smoke-must-gather:0.2.0"
-          }
+          "spec": {}
         }
       ]
     capabilities: Basic Install
     operators.operatorframework.io/builder: operator-sdk-v1.4.0
     operators.operatorframework.io/project_layout: go.kubebuilder.io/v3
-  name: isv-must-gather-operator.v0.2.1
+  name: isv-must-gather-operator.v0.2.0
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
@@ -221,7 +219,7 @@ spec:
                 - --leader-elect
                 command:
                 - /manager
-                image: quay.io/jooholee/isv-must-gather-operator:0.2.1
+                image: quay.io/jooholee/isv-must-gather-operator:0.2.0
                 imagePullPolicy: Always
                 livenessProbe:
                   httpGet:
@@ -295,4 +293,4 @@ spec:
   provider:
     name: Jooho Lee
     url: https://github.com/Jooho
-  version: 0.2.1
+  version: 0.2.0
