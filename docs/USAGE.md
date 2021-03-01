@@ -26,10 +26,10 @@
   kind: CatalogSource 
   metadata: 
     name: isv-must-gather-operator-catalog 
-    namespace: openshift-marketplace 
+    namespace: openshift-operators 
   spec: 
     sourceType: grpc 
-    image: quay.io/jooholee/isv-must-gather-operator:latest" | oc create -f -  
+    image: quay.io/jooholee/isv-must-gather-operator:0.2.0" | oc create -f -  
   ~~~
 
 

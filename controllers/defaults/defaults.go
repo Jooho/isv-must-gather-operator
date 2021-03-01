@@ -1,6 +1,7 @@
 package defaults
 
 const (
+	prefix = "must-gather-"
 	//DestDir is for webserver context-root and also mustgather.tar path. Do not change this DestDir.
 	DestDir = "/opt/download"
 	//IsvCliImgVersion will be updated by make command
@@ -14,10 +15,11 @@ var (
 	NodeSelector = map[string]string{"node-role.kubernetes.io/worker=": ""}
 
 	//ServiceAccount is the default sc name for deploying isv-cli image and this need admin role level because isv-cli image will deploy must-gather image that need admin permission
-	ServiceAccount = "isv-cli-sa"
+	ServiceAccount = prefix + "isv-cli-sa"
 
 	//RoleBinding is the default rb name for mapping between ServiceAccount and RoleBinding.
-	RoleBinding = "isv-cli-rb"
+	// RoleBinding = "isv-cli-rb"
+	RoleBinding = prefix + "isv-cli-rb"
 
 	//Deployment is for isv-cli image
 	Deployment = "isv-cli-deploy"

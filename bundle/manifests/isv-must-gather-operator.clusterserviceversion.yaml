@@ -189,16 +189,18 @@ spec:
           - create
         serviceAccountName: default
       deployments:
-      - name: isv-must-gather-operator-controller-manager
+      - name: must-gather-controller-manager
         spec:
           replicas: 1
           selector:
             matchLabels:
+              bin: isv-cli
               control-plane: controller-manager
           strategy: {}
           template:
             metadata:
               labels:
+                bin: isv-cli
                 control-plane: controller-manager
             spec:
               containers:

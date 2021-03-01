@@ -127,13 +127,14 @@ func (r *MustGatherReconciler) Reconcile(ctx context.Context, req ctrl.Request) 
 			return ctrl.Result{}, err
 		}
 	}
-	// }
+
 	// Deployment
 	dep := &corev1.Pod{}
 	err = r.Get(ctx, types.NamespacedName{Name: defaults.Pod, Namespace: mustgather.Namespace}, dep)
 	if err != nil && errors.IsNotFound(err) {
 
 		dep = r.newPod(sa.Name, mustgather)
+		// dep = r.newPod(defaults.ServiceAccount, mustgather)
 
 		log.Info("Creating a new Pod", "Pod.Namespace", mustgather.Namespace, "Pod.Name", dep.Name)
 		if err = r.Create(ctx, dep); err != nil {

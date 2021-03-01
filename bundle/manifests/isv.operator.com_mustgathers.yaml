@@ -4,6 +4,8 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.4.1
   creationTimestamp: null
+  labels:
+    bin: isv-cli
   name: mustgathers.isv.operator.com
 spec:
   group: isv.operator.com

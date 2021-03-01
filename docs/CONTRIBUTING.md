@@ -5,11 +5,13 @@
 make install              // Deploy CRD on the cluster
 make run                  // Deploy isv-must-gather operator on local
 make t-cr or t-cr-event   // t-cr (full testing), t-cr-event(only events object)
+
+make uninstall            // Undeploy CRD from the cluster
 ~~~
 
 ## Cluster Test
 ~~~
-make t-deploy-all     // deploy MustGather Operator on the cluster
+make t-deploy-all     // build,deploy MustGather Operator on the cluster
 make t-cr or t-cr-event      // t-cr (full testing), t-cr-event(only events object)
 
 make t-undeploy  //delete MustGather CR, all MustGather related objects

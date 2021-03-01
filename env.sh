@@ -11,8 +11,7 @@ export OPM_VERSION=1.16.1
 export REPO_URL=github.com/jooho/isv-must-gather-operator
 export NEW_OP_NAME=isv-must-gather-operator
 export NEW_OP_HOME=${ROOT_HOME}/${NEW_OP_NAME}
-# export NAMESPACE=${NEW_OP_NAME}
-export NAMESPACE=openshift-marketplace
+export NAMESPACE=${NEW_OP_NAME} 
 
 # Images Info
 export VERSION=0.2.0

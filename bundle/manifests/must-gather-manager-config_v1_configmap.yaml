@@ -14,4 +14,6 @@ data:
       resourceName: 489beee3.operator.com
 kind: ConfigMap
 metadata:
-  name: isv-must-gather-operator-manager-config
+  labels:
+    bin: isv-cli
+  name: must-gather-manager-config

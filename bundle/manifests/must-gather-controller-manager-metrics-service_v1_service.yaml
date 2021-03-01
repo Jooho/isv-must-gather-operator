@@ -3,14 +3,16 @@ kind: Service
 metadata:
   creationTimestamp: null
   labels:
+    bin: isv-cli
     control-plane: controller-manager
-  name: isv-must-gather-operator-controller-manager-metrics-service
+  name: must-gather-controller-manager-metrics-service
 spec:
   ports:
   - name: https
     port: 8443
     targetPort: https
   selector:
+    bin: isv-cli
     control-plane: controller-manager
 status:
   loadBalancer: {}
