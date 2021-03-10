@@ -258,6 +258,7 @@ spec:
 EOF
 
 cat <<EOF | oc apply -f -
+apiVersion: operators.coreos.com/v1alpha1
 kind: Subscription
 metadata:
   name: nfs-provisioner-operator
